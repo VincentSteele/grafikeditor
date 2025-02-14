@@ -40,11 +40,16 @@ public class GPanel extends JPanel {
         buffer = temp;
     }
 
-    public void setBrightness(double percent) {
+    public void brightness(double percent) {
         oldBuffer = buffer;
-        buffer = MaRGB.setBrightness(buffer, percent);
+        buffer = MaRGB.brightness(buffer, percent);
     }
 
+    public void greyscale() {
+        oldBuffer = buffer;
+        buffer = MaRGB.greyscale(buffer);
+    }
+    
     @Override
     public void paintComponent(Graphics g) {
         int h = this.getHeight();

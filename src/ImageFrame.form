@@ -98,6 +98,9 @@
         <Property name="text" type="java.lang.String" value="Dunkel"/>
         <Property name="toolTipText" type="java.lang.String" value="Helligkeitsregler runter"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buDunkelActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="buOptimieren">
       <Properties>
@@ -122,6 +125,9 @@
         <Property name="text" type="java.lang.String" value="Graustufen"/>
         <Property name="toolTipText" type="java.lang.String" value="In Graustufen umwandeln."/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buGraustufenActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="buZurueck">
       <Properties>

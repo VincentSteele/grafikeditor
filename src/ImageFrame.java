@@ -60,6 +60,11 @@ public class ImageFrame extends javax.swing.JFrame {
 
         buDunkel.setText("Dunkel");
         buDunkel.setToolTipText("Helligkeitsregler runter");
+        buDunkel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buDunkelActionPerformed(evt);
+            }
+        });
 
         buOptimieren.setText("Optimieren");
         buOptimieren.setToolTipText("Helligkeitsbereich optimal ausnutzen.");
@@ -72,6 +77,11 @@ public class ImageFrame extends javax.swing.JFrame {
 
         buGraustufen.setText("Graustufen");
         buGraustufen.setToolTipText("In Graustufen umwandeln.");
+        buGraustufen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buGraustufenActionPerformed(evt);
+            }
+        });
 
         buZurueck.setText("Zurück");
         buZurueck.addActionListener(new java.awt.event.ActionListener() {
@@ -125,7 +135,7 @@ public class ImageFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buHellActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buHellActionPerformed
-        this.gpBild.setBrightness(120);
+        this.gpBild.brightness(120);
         this.gpBild.repaint();
     }//GEN-LAST:event_buHellActionPerformed
 
@@ -133,6 +143,16 @@ public class ImageFrame extends javax.swing.JFrame {
         this.gpBild.swapBuffer();
         this.gpBild.repaint();
     }//GEN-LAST:event_buZurueckActionPerformed
+
+    private void buDunkelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buDunkelActionPerformed
+        this.gpBild.brightness(80);
+        this.gpBild.repaint();
+    }//GEN-LAST:event_buDunkelActionPerformed
+
+    private void buGraustufenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buGraustufenActionPerformed
+        this.gpBild.greyscale();
+        this.gpBild.repaint();
+    }//GEN-LAST:event_buGraustufenActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
