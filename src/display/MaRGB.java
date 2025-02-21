@@ -8,31 +8,41 @@ public class MaRGB {
     
     public static BufferedImage brightness(BufferedImage buffer, double percent) {
         BuImgWrapper img = new BuImgWrapper(buffer);
+        img.setColorMatrix(img.getColorMatrix().times(percent / 100));
+        return img;
+    }
+    
+    public static BufferedImage lighter(BufferedImage buffer, double percent) {
+        BuImgWrapper img = new BuImgWrapper(buffer);
+        Matrix cm = img.getColorMatrix();
+        
+        Matrix wm = new Matrix(3, cm.getColumnDimension(), 1.0);
+
         double f = percent / 100;
-        img.setColorMatrix(img.getColorMatrix().times(f));
+        img.setColorMatrix(cm.times(1 - f).plus(wm.times(f)));
+        
+        return img;
+    }
+    
+        public static BufferedImage darker(BufferedImage buffer, double percent) {
+        BuImgWrapper img = new BuImgWrapper(buffer);
+        Matrix cm = img.getColorMatrix();
+        
+        Matrix wm = new Matrix(3, cm.getColumnDimension(), 0.0);
+
+        double f = percent / 100;
+        img.setColorMatrix(cm.times(1 - f).plus(wm.times(f)));
+        
         return img;
     }
     
     public static BufferedImage greyscale(BufferedImage buffer) {
         BuImgWrapper img = new BuImgWrapper(buffer);
-        Matrix cm = img.getColorMatrix();
-        Matrix gm = new Matrix(3, cm.getColumnDimension());
-
-        for (int i = 0; i < cm.getColumnDimension(); i++) {
-            double r = cm.get(0, i);
-            double g = cm.get(1, i);
-            double b = cm.get(2, i);
-
-            // https://de.wikipedia.org/wiki/Luminanz
-            double grey = 0.299 * r + 0.587 * g + 0.114 * b;
-
-            gm.set(0, i, grey);
-            gm.set(1, i, grey);
-            gm.set(2, i, grey);
-        }
-
-        img.setColorMatrix(gm);
+        
+        // https://de.wikipedia.org/wiki/Luminanz
+        Matrix gm = new Matrix(new double[][] { {0.299, 0.587, 0.114} }).times(img.getColorMatrix()); 
+        img.setColorMatrix(new Matrix(3, 1, 1.0).times(gm));
+        
         return img;
     }
-    
 }

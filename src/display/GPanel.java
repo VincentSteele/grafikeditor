@@ -22,40 +22,50 @@ public class GPanel extends JPanel {
 
     public BufferedImage cloneBuffer() {
         BufferedImage copy = new BufferedImage(
-                buffer.getWidth(),
-                buffer.getHeight(),
-                buffer.getType()
+                this.buffer.getWidth(),
+                this.buffer.getHeight(),
+                this.buffer.getType()
         );
 
         Graphics g = copy.createGraphics();
-        g.drawImage(buffer, 0, 0, null);
+        g.drawImage(this.buffer, 0, 0, null);
         g.dispose();
 
         return copy;
     }
 
-    public void swapBuffer() {
-        BufferedImage temp = oldBuffer;
-        oldBuffer = buffer;
-        buffer = temp;
-    }
-
     public void brightness(double percent) {
-        oldBuffer = buffer;
-        buffer = MaRGB.brightness(buffer, percent);
+        this.oldBuffer = this.buffer;
+        this.buffer = MaRGB.brightness(this.buffer, percent);
+    }
+    
+        public void lighter(double percent) {
+        this.oldBuffer = this.buffer;
+        this.buffer = MaRGB.lighter(this.buffer, percent);
+    }
+    
+    public void darker(double percent) {
+        this.oldBuffer = this.buffer;
+        this.buffer = MaRGB.darker(this.buffer, percent);
     }
 
     public void greyscale() {
-        oldBuffer = buffer;
-        buffer = MaRGB.greyscale(buffer);
+        this.oldBuffer = this.buffer;
+        this.buffer = MaRGB.greyscale(this.buffer);
     }
-    
+   
+    public void swapBuffer() {
+        BufferedImage temp = this.oldBuffer;
+        this.oldBuffer = this.buffer;
+        this.buffer = temp;
+    }
+        
     @Override
     public void paintComponent(Graphics g) {
         int h = this.getHeight();
         int w = this.getWidth();
 
-        if (buffer == null) {
+        if (this.buffer == null) {
             g.setColor(this.getBackground());
             g.fillRect(0, 0, w, h);
 
@@ -65,7 +75,7 @@ public class GPanel extends JPanel {
             g.drawLine(0, h - 1, w - 1, 0);
         } 
         else {
-            g.drawImage(buffer, 0, 0, null);
+            g.drawImage(this.buffer, 0, 0, null);
         }
     }
     
@@ -74,6 +84,7 @@ public class GPanel extends JPanel {
     }
         
     public void setBuffer(BufferedImage buffer) {
+        this.oldBuffer = this.buffer;
         this.buffer = buffer;
     }
 }
