@@ -2,13 +2,12 @@
 import display.ImageFileChooser;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.text.DecimalFormat;
+import java.util.List;
 import javax.imageio.ImageIO;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -19,6 +18,8 @@ import javax.swing.UIManager;
  
 public class ImageFrame extends javax.swing.JFrame {
 
+    private static final List<String> SUPPORTED_FORMATS = List.of("tif", "jpg", "tiff", "bmp", "gif", "png", "wbmp", "jpeg");
+    
     private static ImageFrame frame;
     
     private ImageFileChooser fileChooser = new ImageFileChooser();
@@ -56,6 +57,8 @@ public class ImageFrame extends javax.swing.JFrame {
         buZurueck = new javax.swing.JButton();
         spMessages = new javax.swing.JScrollPane();
         taMessages = new javax.swing.JTextArea();
+        buAutozoom = new javax.swing.JButton();
+        cbZoom = new javax.swing.JComboBox<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         meDatei = new javax.swing.JMenu();
         meHilfe = new javax.swing.JMenu();
@@ -67,11 +70,11 @@ public class ImageFrame extends javax.swing.JFrame {
         gpBild.setLayout(gpBildLayout);
         gpBildLayout.setHorizontalGroup(
             gpBildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 540, Short.MAX_VALUE)
+            .addGap(0, 800, Short.MAX_VALUE)
         );
         gpBildLayout.setVerticalGroup(
             gpBildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 302, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         jPanel1.setLayout(new java.awt.GridLayout(2, 0));
@@ -132,16 +135,19 @@ public class ImageFrame extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(buGraustufen, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buAufhellen, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buHell, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(buAufhellen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buGraustufen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(6, 6, 6)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(buDunkel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(buAbdunkeln, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buOptimieren, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)))
+                    .addComponent(buOptimieren, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)))
             .addComponent(buZurueck, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(buHell, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buDunkel, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,6 +172,21 @@ public class ImageFrame extends javax.swing.JFrame {
         taMessages.setRows(5);
         spMessages.setViewportView(taMessages);
 
+        buAutozoom.setText("Autozoom");
+        buAutozoom.setToolTipText("In Graustufen umwandeln.");
+        buAutozoom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buAutozoomActionPerformed(evt);
+            }
+        });
+
+        cbZoom.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbZoom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbZoomActionPerformed(evt);
+            }
+        });
+
         meDatei.setText("Datei");
         jMenuBar1.add(meDatei);
 
@@ -180,28 +201,40 @@ public class ImageFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(gpBild, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(gpBild, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(spMessages))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(spMessages)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cbZoom, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buAutozoom, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spMessages))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(gpBild, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(99, 99, 99)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(gpBild, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 171, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(buAutozoom)
+                            .addComponent(cbZoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spMessages, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         pack();
@@ -209,6 +242,16 @@ public class ImageFrame extends javax.swing.JFrame {
 
     private void initCustom() {
         this.spMessages.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        
+        DefaultComboBoxModel<String> cbModel = new DefaultComboBoxModel<>();
+        
+        for (int i = 1; i <= 20; i++)
+        {
+            cbModel.addElement((i * 10) + "%");
+        }
+        
+        this.cbZoom.setModel(cbModel);
+        this.cbZoom.getModel().setSelectedItem("100%");
     }
     
     private void initMenu() {
@@ -262,17 +305,34 @@ public class ImageFrame extends javax.swing.JFrame {
         }
     }
     
-    // todo format !!!!!!!!!!!!!!!!!1
-    
     private void saveImage() {
         int result = this.fileChooser.showSaveDialog(this);
 
         if (result == JFileChooser.APPROVE_OPTION) {
             try {
                 File file = this.fileChooser.getSelectedFile();
-                String format = "png";
-                ImageIO.write(this.gpBild.getBuffer(), format, file);
-                this.taMessages.append("Datei gespeichert\n");
+                String[] nameParts = file.getName().split("\\.");
+                String format;
+                
+                if (nameParts.length > 1)
+                {
+                    format = nameParts[nameParts.length - 1];
+                }
+                else
+                {
+                    format = "png";
+                    file = new File(file.getAbsoluteFile() + ".png");
+                }
+                        
+                if (SUPPORTED_FORMATS.contains(format))
+                {
+                    ImageIO.write(this.gpBild.getBuffer(), format, file);
+                    this.taMessages.append("Datei gespeichert\n");
+                }
+                else
+                {
+                    this.taMessages.append("Format nicht unterstützt\n");
+                }
             } catch (IOException ex) {
                 this.taMessages.append(ex.getMessage() + "\n");
             }
@@ -329,6 +389,23 @@ public class ImageFrame extends javax.swing.JFrame {
         this.taMessages.append("abdunkeln\n");
     }//GEN-LAST:event_buAbdunkelnActionPerformed
 
+    private void buAutozoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buAutozoomActionPerformed
+        float scale = this.gpBild.fitScale();
+        this.gpBild.repaint();
+        this.cbZoom.getModel().setSelectedItem(String.format("%.2f", (scale * 100)) + "%");
+    }//GEN-LAST:event_buAutozoomActionPerformed
+
+    private void cbZoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbZoomActionPerformed
+        try
+        {
+            String selected = (String)this.cbZoom.getModel().getSelectedItem();
+            int percent = Integer.parseInt(selected.replace("%", ""));
+            this.gpBild.setScale(percent);
+            this.gpBild.repaint();
+        }
+        catch (NumberFormatException ignored) {}
+    }//GEN-LAST:event_cbZoomActionPerformed
+
     public static void main(String args[]) {
         try
         {
@@ -345,11 +422,13 @@ public class ImageFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buAbdunkeln;
     private javax.swing.JButton buAufhellen;
+    private javax.swing.JButton buAutozoom;
     private javax.swing.JButton buDunkel;
     private javax.swing.JButton buGraustufen;
     private javax.swing.JButton buHell;
     private javax.swing.JButton buOptimieren;
     private javax.swing.JButton buZurueck;
+    private javax.swing.JComboBox<String> cbZoom;
     private display.GPanel gpBild;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;

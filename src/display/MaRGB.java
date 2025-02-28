@@ -28,10 +28,10 @@ public class MaRGB {
         BuImgWrapper img = new BuImgWrapper(buffer);
         Matrix cm = img.getColorMatrix();
         
-        Matrix wm = new Matrix(3, cm.getColumnDimension(), 0.0);
+        Matrix wb = new Matrix(3, cm.getColumnDimension(), 0.0);
 
         double f = percent / 100;
-        img.setColorMatrix(cm.times(1 - f).plus(wm.times(f)));
+        img.setColorMatrix(cm.times(1 - f).plus(wb.times(f)));
         
         return img;
     }
