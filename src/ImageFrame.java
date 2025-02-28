@@ -23,6 +23,9 @@ public class ImageFrame extends javax.swing.JFrame {
     private static ImageFrame frame;
     
     private ImageFileChooser fileChooser = new ImageFileChooser();
+    
+    private int dragStartX = 0;
+    private int dragStartY = 0;
 
     private ImageFrame() {
         this.initComponents();

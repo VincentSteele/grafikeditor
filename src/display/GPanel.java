@@ -4,15 +4,22 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
-public class GPanel extends JPanel {
+public class GPanel extends JPanel  {
 
     private BufferedImage buffer;
     private BufferedImage oldBuffer;
     
     private float scale = 1;
+    
+    private int offsetX = 0;
+    private int offsetY = 0;
+    private int dragStartX = 0;
+    private int dragStartY = 0;
 
     public GPanel() {
         this(130, 90, Color.BLUE);
@@ -21,6 +28,24 @@ public class GPanel extends JPanel {
     public GPanel(int xSize, int ySize, Color bgColor) {
         this.setBackground(bgColor);
         this.setPreferredSize(new Dimension(xSize, ySize));
+        
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                dragStartX = e.getX() - offsetX;
+                dragStartY = e.getY() - offsetY;
+            }
+        });
+        
+       
+        this.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                offsetX = e.getX() - dragStartX;
+                offsetY = e.getY() - dragStartY;
+                repaint();
+            }
+        });
     }
 
     public BufferedImage cloneBuffer() {
@@ -42,7 +67,7 @@ public class GPanel extends JPanel {
         this.buffer = MaRGB.brightness(this.buffer, percent);
     }
     
-        public void lighter(double percent) {
+    public void lighter(double percent) {
         this.oldBuffer = this.buffer;
         this.buffer = MaRGB.lighter(this.buffer, percent);
     }
@@ -68,6 +93,7 @@ public class GPanel extends JPanel {
         if (this.buffer == null) {
             int h = this.getHeight();
             int w = this.getWidth();
+            
             g.setColor(this.getBackground());
             g.fillRect(0, 0, w, h);
 
@@ -82,9 +108,12 @@ public class GPanel extends JPanel {
             int h = (int)(this.buffer.getHeight() * this.scale);
             int w = (int)(this.buffer.getWidth() * this.scale);
             
-            // set rendering
+            // todo set rendering
             
-            g2d.drawImage(this.buffer, 0, 0, w, h, null);
+            g2d.setColor(Color.LIGHT_GRAY);
+            g2d.fillRect(0, 0, this.getMaximumSize().height, this.getMaximumSize().width);
+            
+            g2d.drawImage(this.buffer, this.offsetX, this.offsetY, w, h, null);
         }
     }
     
@@ -107,6 +136,13 @@ public class GPanel extends JPanel {
         float sx = (float)this.getWidth() / this.buffer.getWidth();
         float sy = (float)this.getHeight() / this.buffer.getHeight();
         this.scale = Math.min(sx, sy);
+        this.offsetX = 0;
+        this.offsetY = 0;
         return this.scale;
+    }
+    
+    private void snapToBoundaries()
+    {
+        // ... besser einfach resetPosition()?
     }
 }
