@@ -1,6 +1,7 @@
 package display;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -8,6 +9,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
+
+import static java.awt.RenderingHints.*;
 
 public class GPanel extends JPanel  {
 
@@ -28,6 +31,8 @@ public class GPanel extends JPanel  {
     public GPanel(int xSize, int ySize, Color bgColor) {
         this.setBackground(bgColor);
         this.setPreferredSize(new Dimension(xSize, ySize));
+        
+        this.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         this.addMouseListener(new MouseAdapter() {
             @Override
@@ -105,15 +110,30 @@ public class GPanel extends JPanel  {
         else {
             Graphics2D g2d = (Graphics2D)g;
             
-            int h = (int)(this.buffer.getHeight() * this.scale);
-            int w = (int)(this.buffer.getWidth() * this.scale);
+            g2d.setRenderingHint(KEY_RENDERING, VALUE_RENDER_QUALITY);
+            g2d.setRenderingHint(KEY_COLOR_RENDERING, VALUE_COLOR_RENDER_QUALITY);
             
-            // todo set rendering
-            
+            if (this.scale == 1)
+            {
+                g2d.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_OFF);
+                g2d.setRenderingHint(KEY_INTERPOLATION, VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+            }
+            else
+            {
+                g2d.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON);
+                g2d.setRenderingHint(KEY_INTERPOLATION, VALUE_INTERPOLATION_BICUBIC);
+            }
+
             g2d.setColor(Color.LIGHT_GRAY);
             g2d.fillRect(0, 0, this.getMaximumSize().height, this.getMaximumSize().width);
             
-            g2d.drawImage(this.buffer, this.offsetX, this.offsetY, w, h, null);
+            
+            int h = (int)(this.buffer.getHeight() * this.scale);
+            int w = (int)(this.buffer.getWidth() * this.scale);
+            int x = (this.getWidth() - w) / 2;
+            int y = (this.getHeight() - h) / 2;
+            
+            g2d.drawImage(this.buffer, x + this.offsetX, y + this.offsetY, w, h, null);
         }
     }
     
@@ -135,14 +155,11 @@ public class GPanel extends JPanel  {
     {
         float sx = (float)this.getWidth() / this.buffer.getWidth();
         float sy = (float)this.getHeight() / this.buffer.getHeight();
+        
         this.scale = Math.min(sx, sy);
         this.offsetX = 0;
         this.offsetY = 0;
+        
         return this.scale;
-    }
-    
-    private void snapToBoundaries()
-    {
-        // ... besser einfach resetPosition()?
     }
 }
