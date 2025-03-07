@@ -1,5 +1,6 @@
 
 import display.ImageFileChooser;
+import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -19,6 +20,8 @@ import javax.swing.UIManager;
 
 public class ImageFrame extends javax.swing.JFrame {
 
+    private static final int ZOOMSTUFEN = 20;
+    
     private static final List<String> SUPPORTED_FORMATS = List.of("tif", "jpg", "tiff", "bmp", "gif", "png", "wbmp", "jpeg");
     
     private static ImageFrame frame;
@@ -48,7 +51,7 @@ public class ImageFrame extends javax.swing.JFrame {
 
         gpBild = new display.GPanel();
         jPanel1 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
+        paSidePanel = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         buHell = new javax.swing.JButton();
         buDunkel = new javax.swing.JButton();
@@ -189,29 +192,28 @@ public class ImageFrame extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout paSidePanelLayout = new javax.swing.GroupLayout(paSidePanel);
+        paSidePanel.setLayout(paSidePanelLayout);
+        paSidePanelLayout.setHorizontalGroup(
+            paSidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(paSidePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(paSidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(spMessages)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addComponent(cbZoom, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(buAutozoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, paSidePanelLayout.createSequentialGroup()
+                        .addComponent(cbZoom, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buAutozoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        paSidePanelLayout.setVerticalGroup(
+            paSidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(paSidePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(paSidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbZoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buAutozoom))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -235,7 +237,7 @@ public class ImageFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(gpBild, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(paSidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -244,7 +246,7 @@ public class ImageFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(paSidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(gpBild, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(99, 99, 99)
@@ -310,12 +312,44 @@ public class ImageFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_buHellActionPerformed
 
     private void initCustom() {
+        this.getContentPane().removeAll();
+        this.getContentPane().setLayout(new BorderLayout());
+        this.getContentPane().add(this.gpBild, BorderLayout.CENTER);
+        this.getContentPane().add(this.paSidePanel, BorderLayout.EAST);
+        
+        this.gpBild.addMouseWheelListener(e -> {
+            if (this.cbZoom.getSelectedIndex() == -1) {
+                String sel = (String)this.cbZoom.getSelectedItem();
+                int curZoom = Integer.parseInt(sel.substring(0, sel.indexOf(','))) / 10;
+                
+                if (e.getWheelRotation() > 0) {
+                    curZoom--;
+                }
+                
+                if (curZoom >= this.cbZoom.getItemCount()) {
+                    curZoom = this.cbZoom.getItemCount() - 1;
+                }
+                else if (curZoom < 0) {
+                    curZoom = 0;
+                }  
+                
+                this.cbZoom.setSelectedIndex(curZoom);
+            }
+            else {
+                if (e.getWheelRotation() < 0) {
+                    this.cbZoom.setSelectedIndex(Math.min(this.cbZoom.getItemCount() - 1, cbZoom.getSelectedIndex() + 1));
+                }
+                else if (e.getWheelRotation() > 0) {
+                    this.cbZoom.setSelectedIndex(Math.max(0, this.cbZoom.getSelectedIndex() - 1));
+                }
+            }
+        });
+        
         this.spMessages.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         
         DefaultComboBoxModel<String> cbModel = new DefaultComboBoxModel<>();
         
-        for (int i = 1; i <= 20; i++)
-        {
+        for (int i = 1; i <= ZOOMSTUFEN; i++) {
             cbModel.addElement((i * 10) + "%");
         }
         
@@ -365,7 +399,7 @@ public class ImageFrame extends javax.swing.JFrame {
                 BufferedImage img = ImageIO.read(file);
                 
                 this.gpBild.setBuffer(img);
-                this.gpBild.repaint();
+                this.buAutozoomActionPerformed(null);
                 
                 this.taMessages.append("Datei geladen\n");
             } catch (IOException ex) {
@@ -383,23 +417,19 @@ public class ImageFrame extends javax.swing.JFrame {
                 String[] nameParts = file.getName().split("\\.");
                 String format;
                 
-                if (nameParts.length > 1)
-                {
+                if (nameParts.length > 1) {
                     format = nameParts[nameParts.length - 1];
                 }
-                else
-                {
+                else {
                     format = "png";
                     file = new File(file.getAbsoluteFile() + ".png");
                 }
                         
-                if (SUPPORTED_FORMATS.contains(format))
-                {
+                if (SUPPORTED_FORMATS.contains(format)) {
                     ImageIO.write(this.gpBild.getBuffer(), format, file);
                     this.taMessages.append("Datei gespeichert\n");
                 }
-                else
-                {
+                else {
                     this.taMessages.append("Format nicht unterstützt\n");
                 }
             } catch (IOException ex) {
@@ -423,8 +453,7 @@ public class ImageFrame extends javax.swing.JFrame {
     }
     
     public static void main(String args[]) {
-        try
-        {
+        try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         }
         catch (Exception ignored) {}
@@ -449,9 +478,9 @@ public class ImageFrame extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JMenu meDatei;
     private javax.swing.JMenu meHilfe;
+    private javax.swing.JPanel paSidePanel;
     private javax.swing.JScrollPane spMessages;
     private javax.swing.JTextArea taMessages;
     // End of variables declaration//GEN-END:variables
