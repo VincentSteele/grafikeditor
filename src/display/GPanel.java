@@ -113,13 +113,11 @@ public class GPanel extends JPanel  {
             g2d.setRenderingHint(KEY_RENDERING, VALUE_RENDER_QUALITY);
             g2d.setRenderingHint(KEY_COLOR_RENDERING, VALUE_COLOR_RENDER_QUALITY);
             
-            if (this.scale == 1)
-            {
+            if (this.scale == 1) {
                 g2d.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_OFF);
                 g2d.setRenderingHint(KEY_INTERPOLATION, VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
             }
-            else
-            {
+            else {
                 g2d.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON);
                 g2d.setRenderingHint(KEY_INTERPOLATION, VALUE_INTERPOLATION_BICUBIC);
             }
@@ -146,13 +144,11 @@ public class GPanel extends JPanel  {
         this.buffer = buffer;
     }
     
-    public void setScale(int percent)
-    {
+    public void setScale(int percent) {
         this.scale = (float)percent / 100;
     }
     
-    public float fitScale()
-    {
+    public float fitScale() {
         float sx = (float)this.getWidth() / this.buffer.getWidth();
         float sy = (float)this.getHeight() / this.buffer.getHeight();
         
