@@ -24,9 +24,6 @@ public class ImageFrame extends javax.swing.JFrame {
     private static ImageFrame frame;
     
     private ImageFileChooser fileChooser = new ImageFileChooser();
-    
-    private int dragStartX = 0;
-    private int dragStartY = 0;
 
     private ImageFrame() {
         this.initComponents();
@@ -79,7 +76,7 @@ public class ImageFrame extends javax.swing.JFrame {
         );
         gpBildLayout.setVerticalGroup(
             gpBildLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 522, Short.MAX_VALUE)
         );
 
         jPanel1.setLayout(new java.awt.GridLayout(2, 0));
@@ -184,7 +181,7 @@ public class ImageFrame extends javax.swing.JFrame {
             }
         });
 
-        buAutozoom.setText("an Fenster anpassen");
+        buAutozoom.setText("Autozoom");
         buAutozoom.setToolTipText("In Graustufen umwandeln.");
         buAutozoom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -200,11 +197,12 @@ public class ImageFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(spMessages)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(cbZoom, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buAutozoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(cbZoom, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(buAutozoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -246,17 +244,70 @@ public class ImageFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(gpBild, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(99, 99, 99)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 423, Short.MAX_VALUE))
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(gpBild, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE))
+                        .addGap(0, 423, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void buAutozoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buAutozoomActionPerformed
+        float scale = this.gpBild.fitScale();
+        this.gpBild.repaint();
+        this.cbZoom.getModel().setSelectedItem(String.format("%.2f", (scale * 100)) + "%");
+    }//GEN-LAST:event_buAutozoomActionPerformed
+
+    private void cbZoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbZoomActionPerformed
+        try
+        {
+            String selected = (String)this.cbZoom.getModel().getSelectedItem();
+            int percent = Integer.parseInt(selected.replace("%", ""));
+            this.gpBild.setScale(percent);
+            this.gpBild.repaint();
+        }
+        catch (NumberFormatException ignored) {}
+    }//GEN-LAST:event_cbZoomActionPerformed
+
+    private void buZurueckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buZurueckActionPerformed
+        this.gpBild.swapBuffer();
+        this.gpBild.repaint();
+        this.taMessages.append("Zurück\n");
+    }//GEN-LAST:event_buZurueckActionPerformed
+
+    private void buGraustufenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buGraustufenActionPerformed
+        this.gpBild.greyscale();
+        this.gpBild.repaint();
+        this.taMessages.append("Graustufen\n");
+    }//GEN-LAST:event_buGraustufenActionPerformed
+
+    private void buAbdunkelnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buAbdunkelnActionPerformed
+        this.gpBild.darker(10);
+        this.gpBild.repaint();
+        this.taMessages.append("abdunkeln\n");
+    }//GEN-LAST:event_buAbdunkelnActionPerformed
+
+    private void buAufhellenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buAufhellenActionPerformed
+        this.gpBild.lighter(10);
+        this.gpBild.repaint();
+        this.taMessages.append("aufhellen\n");
+    }//GEN-LAST:event_buAufhellenActionPerformed
+
+    private void buDunkelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buDunkelActionPerformed
+        this.gpBild.brightness(80);
+        this.gpBild.repaint();
+        this.taMessages.append("Dunkel\n");
+    }//GEN-LAST:event_buDunkelActionPerformed
+
+    private void buHellActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buHellActionPerformed
+        this.gpBild.brightness(120);
+        this.gpBild.repaint();
+        this.taMessages.append("Hell\n");
+    }//GEN-LAST:event_buHellActionPerformed
 
     private void initCustom() {
         this.spMessages.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -371,59 +422,6 @@ public class ImageFrame extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, html, "Info", JOptionPane.PLAIN_MESSAGE);
     }
     
-    private void buHellActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buHellActionPerformed
-        this.gpBild.brightness(120);
-        this.gpBild.repaint();
-        this.taMessages.append("Hell\n");
-    }//GEN-LAST:event_buHellActionPerformed
-
-    private void buDunkelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buDunkelActionPerformed
-        this.gpBild.brightness(80);
-        this.gpBild.repaint();
-        this.taMessages.append("Dunkel\n");
-    }//GEN-LAST:event_buDunkelActionPerformed
-
-    private void buGraustufenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buGraustufenActionPerformed
-        this.gpBild.greyscale();
-        this.gpBild.repaint();
-        this.taMessages.append("Graustufen\n");
-    }//GEN-LAST:event_buGraustufenActionPerformed
-
-    private void buZurueckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buZurueckActionPerformed
-        this.gpBild.swapBuffer();
-        this.gpBild.repaint();
-        this.taMessages.append("Zurück\n");
-    }//GEN-LAST:event_buZurueckActionPerformed
-
-    private void buAufhellenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buAufhellenActionPerformed
-        this.gpBild.lighter(10);
-        this.gpBild.repaint();
-        this.taMessages.append("aufhellen\n");
-    }//GEN-LAST:event_buAufhellenActionPerformed
-
-    private void buAbdunkelnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buAbdunkelnActionPerformed
-        this.gpBild.darker(10);
-        this.gpBild.repaint();
-        this.taMessages.append("abdunkeln\n");
-    }//GEN-LAST:event_buAbdunkelnActionPerformed
-
-    private void buAutozoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buAutozoomActionPerformed
-        float scale = this.gpBild.fitScale();
-        this.gpBild.repaint();
-        this.cbZoom.getModel().setSelectedItem(String.format("%.2f", (scale * 100)) + "%");
-    }//GEN-LAST:event_buAutozoomActionPerformed
-
-    private void cbZoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbZoomActionPerformed
-        try
-        {
-            String selected = (String)this.cbZoom.getModel().getSelectedItem();
-            int percent = Integer.parseInt(selected.replace("%", ""));
-            this.gpBild.setScale(percent);
-            this.gpBild.repaint();
-        }
-        catch (NumberFormatException ignored) {}
-    }//GEN-LAST:event_cbZoomActionPerformed
-
     public static void main(String args[]) {
         try
         {
