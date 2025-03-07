@@ -1,6 +1,7 @@
 
 import display.ImageFileChooser;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -29,6 +30,8 @@ public class ImageFrame extends javax.swing.JFrame {
     private ImageFileChooser fileChooser = new ImageFileChooser();
 
     private ImageFrame() {
+        this.setMinimumSize(new Dimension(650, 530));
+        
         this.initComponents();
         this.initCustom();
         this.initMenu();
