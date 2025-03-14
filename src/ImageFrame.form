@@ -228,8 +228,10 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Optimieren"/>
                 <Property name="toolTipText" type="java.lang.String" value="Helligkeitsbereich optimal ausnutzen."/>
-                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buOptimierenActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="buZurueck">
               <Properties>

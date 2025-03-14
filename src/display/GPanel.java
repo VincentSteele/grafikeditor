@@ -87,6 +87,11 @@ public class GPanel extends JPanel  {
         this.buffer = MaRGB.greyscale(this.buffer);
     }
    
+    public void optimize() {
+        this.oldBuffer = this.buffer;
+        this.buffer = MaRGB.optimize(this.buffer);
+    }
+    
     public void swapBuffer() {
         BufferedImage temp = this.oldBuffer;
         this.oldBuffer = this.buffer;

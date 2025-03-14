@@ -129,7 +129,11 @@ public class ImageFrame extends javax.swing.JFrame {
 
         buOptimieren.setText("Optimieren");
         buOptimieren.setToolTipText("Helligkeitsbereich optimal ausnutzen.");
-        buOptimieren.setEnabled(false);
+        buOptimieren.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buOptimierenActionPerformed(evt);
+            }
+        });
 
         buZurueck.setText("Zurück");
         buZurueck.addActionListener(new java.awt.event.ActionListener() {
@@ -314,6 +318,12 @@ public class ImageFrame extends javax.swing.JFrame {
         this.taMessages.append("Hell\n");
     }//GEN-LAST:event_buHellActionPerformed
 
+    private void buOptimierenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buOptimierenActionPerformed
+        this.gpBild.optimize();
+        this.gpBild.repaint();
+        this.taMessages.append("Optimieren\n");
+    }//GEN-LAST:event_buOptimierenActionPerformed
+
     private void initCustom() {
         this.getContentPane().removeAll();
         this.getContentPane().setLayout(new BorderLayout());
@@ -449,6 +459,7 @@ public class ImageFrame extends javax.swing.JFrame {
                       "<li> mich </li>" +
                       "<li> aus </li>" +
                       "</ul>" +
+                      "TwelveMonkeys ImageIO &copy; Harald Kuhr<br><br>" + 
                       "&copy; 2025 Dominik Szekely, ITO8" +
                       "</html>";
 
