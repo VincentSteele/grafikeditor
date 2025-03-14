@@ -21,9 +21,9 @@ import javax.swing.UIManager;
 
 public class ImageFrame extends javax.swing.JFrame {
 
-    private static final int ZOOMSTUFEN = 20;
+    private static final int ZOOMSTUFEN = 25;
     
-    private static final List<String> SUPPORTED_FORMATS = List.of("tif", "jpg", "tiff", "bmp", "gif", "png", "wbmp", "jpeg");
+    private static final List<String> SUPPORTED_FORMATS = List.of("tif", "jpg", "tiff", "bmp", "gif", "png", "wbmp", "jpeg", "tpic", "tga");
     
     private static ImageFrame frame;
     
